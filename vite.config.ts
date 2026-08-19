@@ -14,5 +14,12 @@ export default defineConfig({
   build: {
     target: 'es2020',
     sourcemap: true,
+    outDir: 'build',
+    rollupOptions: {
+      input: {
+        principal: 'index.html',
+        quebraCabeca: 'quebra-cabeca.html',
+      },
+    },
   },
 });

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MonolithAR — Quebra-cabeça do robô</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { min-height: 100%; }
+      body {
+        background: #101015;
+        color: #e8e8ee;
+        font-family: system-ui, sans-serif;
+        padding: 24px;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: minmax(0, 1fr);
+        align-items: start;
+      }
+      @media (min-width: 900px) {
+        body { grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); }
+        #diario-painel { position: sticky; top: 24px; }
+      }
+      header {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid #2a2a35;
+        padding-bottom: 16px;
+      }
+      h1 { font-size: 1.3rem; font-weight: 600; }
+      h2 { margin-top: 28px; font-size: 1.1rem; color: #9fb4ff; }
+      main > section:first-child h2:first-child { margin-top: 0; }
+      h3 { margin-top: 16px; font-size: 1rem; color: #c7d2ff; }
+      p { margin-top: 8px; line-height: 1.5; max-width: 70ch; }
+      main { min-width: 0; }
+      button {
+        background: #4f7cff;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 14px 22px;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      button:hover { background: #3d68e8; }
+      table {
+        margin-top: 12px;
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 0.9rem;
+      }
+      th, td {
+        border: 1px solid #2a2a35;
+        padding: 8px 10px;
+        text-align: left;
+        vertical-align: top;
+      }
+      th { background: #181820; color: #9fb4ff; }
+      #diario-painel {
+        background: #16161d;
+        border: 1px solid #2a2a35;
+        border-radius: 10px;
+        padding: 16px;
+        max-height: calc(100vh - 48px);
+        overflow-y: auto;
+      }
+      #diario-painel h2 { margin-top: 0; }
+      #diario p {
+        margin-top: 10px;
+        padding: 8px 10px;
+        border-left: 4px solid #4a4a55;
+        background: #1c1c25;
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }
+      .diario-nota { border-left-color: #4f7cff; }
+      .diario-alerta { border-left-color: #f97316; }
+      .diario-falha { border-left-color: #ef4444; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Quebra-cabeça do robô — sonda de capacidades</h1>
+      <button id="sondar" type="button">Sondar capacidades</button>
+    </header>
+    <main>
+      <section id="relatorio">
+        <h2>Domínio e regimes</h2>
+        <p>Consultando o navegador…</p>
+      </section>
+      <section id="sonda">
+        <h2>Sonda de capacidades</h2>
+        <p>O resultado aparece aqui depois do clique em "Sondar capacidades".</p>
+      </section>
+    </main>
+    <aside id="diario-painel">
+      <h2>Diário</h2>
+      <div id="diario"></div>
+    </aside>
+    <script type="module" src="/src/quebracabeca/main.ts"></script>
+  </body>
+</html>
