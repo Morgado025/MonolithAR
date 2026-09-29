@@ -151,7 +151,12 @@ void perguntarSuporte().then((suporte) => {
   botaoSondar.addEventListener('click', () => {
     const modo = modoParaSondar(suporte);
     if (modo === undefined) {
-      anotar('Este aparelho não abre sessão de VR nem de AR, então não há o que sondar em sessão.', 'alerta');
+      anotar(
+        navigator.xr === undefined
+          ? 'Este navegador não tem WebXR, então não há sessão para sondar. Abra no Chrome ou no navegador do Quest.'
+          : 'Este aparelho não abre sessão de VR nem de AR, então não há o que sondar em sessão.',
+        'alerta',
+      );
       return;
     }
     anotar('Sondando. Se o aparelho pedir permissão, aceite.');

@@ -7,11 +7,11 @@
 **Grupo:** MonolithAR
 
 **Integrantes:**
-- Nicolas Valderramas Gomes Vaz
-- Bruno Seidedos Pires dos Santos
-- Rogério de Morais Bolognesi Neves
-- Willian Isami Morita Shigekawa
-- Cauã da Silva Reis Morgado
+- Nicolas Valderramas
+- Bruno Seidedos
+- Rogério de Morais
+- Willian Isami
+- Cauã Morgado
 
 **Cena escolhida:** Quebra-cabeça de encaixe geométrico.
 
@@ -220,7 +220,7 @@ A regra de sempre ter algo que roda está satisfeita desde o Bloco 1, e a partir
 **Riscos:**
 - A folga de três centímetros e quinze graus é um chute inicial fundamentado apenas em raciocínio, não em teste no aparelho. Mitigação: testar no Bloco 4, assim que houver acesso a um headset ou celular real, e ajustar antes do Bloco 5.
 - Os modelos tridimensionais definitivos do robô ainda não foram escolhidos. Mitigação: manter as peças em formas primitivas como alternativa definitiva, e não só provisória, caso nenhum modelo livre caiba no orçamento de polígonos da Seção 10.
-- O comportamento real do regime de AR (Bloco 4) depende de um aparelho Android com ARCore que o grupo ainda não testou nesta cena. O que a sonda já confirmou até aqui veio de um navegador headless em servidor e de um notebook Windows, que declaram VR e AR como não suportados por não terem hardware XR (`docs/aparelhos-testados.md`). Falta um aparelho que abra sessão imersiva.
+- O comportamento real do regime de AR (Bloco 4) ainda não foi visto, porque a cena ainda não é desenhada dentro da sessão. O que já se sabe: no celular Moto G20 com Chrome, a sonda abriu uma sessão `immersive-ar` e o aparelho concedeu `local-floor`, `hit-test`, `anchors` e `plane-detection`, com seis graus de liberdade e composição `alpha-blend`, igual à declarada; só o `hand-tracking` veio negado. O mesmo celular no Firefox responde "sem resposta" (não tem WebXR), e o notebook Windows, "não suportado" para VR e AR (`docs/aparelhos-testados.md`). O VR ainda não foi aberto em sessão: falta testar num visor.
 
 **Decisões em aberto:**
 - Origem final dos modelos tridimensionais (um pacote livre específico, ainda a escolher, ou manter as primitivas atuais).
@@ -236,6 +236,8 @@ A regra de sempre ter algo que roda está satisfeita desde o Bloco 1, e a partir
 | 03 | A Seção 4 não fixava a espessura da moldura nem a da cabeça | Moldura de 2 cm; cabeça cilíndrica de 8 cm de diâmetro por 5 cm | A árvore não se monta sem as três dimensões de cada objeto. |
 | 03 | A Seção 10 dizia que peças e contornos repetem a mesma geometria | Cada malha tem a sua geometria | As cinco formas são diferentes; percebido ao montar. Os dois braços poderiam dividir uma, mas a economia é desprezível e complicava o código. |
 | 03 | A declaração da janela dizia que ela registra contra "a origem arbitrária da própria cena, fixada por quem a modelou" | "o ponto zero que nós mesmos escolhemos para a cena: o chão, embaixo do centro da mesa" | Mesmo sentido, mais concreto, e com as nossas palavras: a frase antiga repetia a do projeto de referência. |
+| 03 | Com "sem resposta" em página segura, a página não explicava o motivo, e o alerta da sonda culpava o aparelho | A página e o alerta dizem que o navegador não tem WebXR e sugerem o Chrome ou o navegador do Quest | Achado do teste no Moto G20 com Firefox para Android: a página estava em HTTPS, mas o navegador não tem WebXR. O limite era do navegador, não do aparelho. |
+| 03 | Quando a sessão era recusada com `NotSupportedError`, a página dizia "ele não suporta este modo" | A página diz que o aparelho recusou a sessão e sugere tentar de novo e aceitar a permissão | Achado do teste no Moto G20 com Chrome: a primeira tentativa foi recusada com esse erro e a segunda abriu. O Chrome usa o mesmo erro por vários motivos, então "não suporta" afirmava demais. |
 | 03 | A sonda também contava quadros sem pose (estabilidade) e classificava o aparelho num tipo; o código estava em 24 arquivos | A sonda responde só o que o Módulo 02 pede (sessões, recursos, espaços e graus, controles); o código ficou em 10 arquivos | Todos do grupo precisam conseguir explicar qualquer arquivo. A contagem de quadros sem pose volta quando existir peça segurada (Seção 11, caso 3). |
 | 03 | O Bloco 2 desenharia a cena nos três regimes | O Bloco 2 desenha só na janela; VR e AR passam ao Bloco 4 | Desenhar dentro da sessão exige o laço entregue pela sessão e o registro contra o chão e contra a mesa, que são módulos adiante. O Módulo 03 cobra a estrutura, e ela é a mesma nos três regimes. |
 | 03 | O código do relatório previa levar o relatório da sonda para dentro da cena quando ela existisse | O relatório da sonda continua em HTML; só o custo do quadro foi para a cena | O relatório é lido antes de entrar em sessão, para escolher o regime; o custo é lido durante. |
@@ -243,6 +245,6 @@ A regra de sempre ter algo que roda está satisfeita desde o Bloco 1, e a partir
 
 **Declaração de uso de ferramentas de inteligência artificial:**
 
-Este documento foi redigido por Cauã com apoio de um assistente de IA (Claude), a partir do domínio já implementado e testado no repositório (`src/quebracabeca/dominio/dominio.ts`) e da estrutura de regimes e sonda de capacidades já existente no projeto. As decisões numéricas desta especificação (folgas de encaixe, medidas em centímetros, orçamento de objetos, ordem de degradação) são sugestões de ponto de partida propostas pela IA a partir de valores usuais em projetos WebXR semelhantes; nenhuma delas foi testada num headset ou celular físico até o momento desta entrega, o que está declarado explicitamente onde relevante ao longo do documento, em vez de apresentado como medição real.
+Este documento foi redigido por Cauã com apoio de um assistente de IA (Claude), a partir do domínio já implementado e testado no repositório (`src/quebracabeca/dominio.ts`) e da estrutura de regimes e sonda de capacidades já existente no projeto. As decisões numéricas desta especificação (folgas de encaixe, medidas em centímetros, orçamento de objetos, ordem de degradação) são sugestões de ponto de partida propostas pela IA a partir de valores usuais em projetos WebXR semelhantes; nenhuma delas foi testada num headset ou celular físico até o momento desta entrega, o que está declarado explicitamente onde relevante ao longo do documento, em vez de apresentado como medição real.
 
-A distinção entre suporte suportado, negado e indeterminado, citada em várias seções, já foi executada de verdade contra um navegador Chrome headless durante o desenvolvimento do projeto, confirmando que a lógica da sonda funciona; ainda não foi executada contra hardware de VR ou AR real.
+A distinção entre suporte suportado, negado e indeterminado, citada em várias seções, foi executada primeiro contra um navegador Chrome headless durante o desenvolvimento e, no Módulo 03, contra hardware de AR real: um celular Moto G20 com Chrome, em que a sonda abriu a sessão e leu recursos concedidos e negados. Ainda não foi executada contra um visor de VR.

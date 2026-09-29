@@ -53,7 +53,9 @@ export function anotar(texto: string, tipo: 'nota' | 'alerta' | 'falha' = 'nota'
 /** Traduz os erros mais comuns da sessão para algo que dê para entender. */
 export function explicarErro(erro: unknown): string {
   if (erro instanceof DOMException && erro.name === 'NotSupportedError') {
-    return 'O aparelho recusou a sessão: ele não suporta este modo.';
+    // No Moto G20 com Chrome, a primeira tentativa deu este erro e a segunda abriu.
+    // O Chrome usa o mesmo erro para vários motivos, então não dá para dizer "não suporta".
+    return 'O aparelho recusou a sessão neste modo. Se a tabela de regimes diz "suportado", tente de novo e aceite o pedido de permissão.';
   }
   if (erro instanceof DOMException && erro.name === 'NotAllowedError') {
     return 'A permissão foi negada. Sem aceitar o acesso à câmera e aos sensores, a sessão não abre.';
@@ -99,6 +101,12 @@ export function mostrarRegimes(raiz: HTMLElement, suporte: Map<RegimeId, Suporte
   if (!window.isSecureContext) {
     raiz.appendChild(
       criar('p', 'Atenção: a página não está em HTTPS, então "sem resposta" aqui é culpa do endereço, não do aparelho.'),
+    );
+  } else if (navigator.xr === undefined) {
+    // Achado do teste no celular: no Firefox para Android a página é segura,
+    // mas o navegador simplesmente não tem WebXR.
+    raiz.appendChild(
+      criar('p', 'Este navegador não tem WebXR, então ninguém responde por VR e AR aqui. Para testar esses regimes, abra no Chrome ou no navegador do Quest.'),
     );
   }
 }

@@ -21,6 +21,8 @@ Tabela completa, com os números medidos e a máquina de cada medição, em [`do
 | Aparelho | Abriu | Não abriu |
 |---|---|---|
 | Notebook Windows 11 (Acer Nitro ANV15-51), Chromium 152 e Edge 154 | janela | VR, AR (sem hardware XR) |
+| Celular Motorola Moto G20, Chrome para Android | janela; sessão de AR aberta pela sonda (recursos lidos, a cena ainda não é desenhada nela) | VR não foi aberto (a sonda escolhe o AR) |
+| Celular Motorola Moto G20, Firefox para Android | janela | VR, AR ("sem resposta": o Firefox para Android não tem WebXR) |
 
 ## Como pôr para rodar
 
@@ -48,6 +50,16 @@ npm run preview   # serve o build em HTTPS
 2. Clique em **Deslizar a moldura**: os contornos vão junto porque são filhos dela; as peças soltas ficam.
 3. Escolha uma peça e clique em **Prender ao contorno**: ela não se move, e a tabela "Trocas de pai" mostra a posição no mundo antes e depois. Com a moldura deslizando, a peça agora vai junto. **Soltar na mesa** devolve a peça à mesa, de novo sem movê-la.
 4. O painel **Custo do quadro**, em cima da mesa, mostra o custo medido e o teto.
+
+## Como as peças se ligam
+
+A decisão que amarra tudo: **a mesma árvore serve aos três regimes.** Nada na cena é escrito para um regime só, e o que muda entre eles fica em três pontos:
+
+- **De quem o nó `superficie` é filho.** Na janela e no VR, da mesa virtual. No AR, vai passar a ser filho da âncora presa à mesa real, com a mesma troca de pai do `trocarDePai.ts`, e a moldura, os contornos e as peças vão junto sem conta nenhuma.
+- **Quem entrega os quadros ao laço.** Na janela é o navegador; numa sessão de VR ou AR, é a sessão. Por isso o laço usa `setAnimationLoop` e anda pelo relógio: o mesmo código serve às duas cadências.
+- **O que o aparelho oferece.** A sonda pergunta antes e guarda a resposta em `ultimoResultado`. Nada deve contar com `hit-test`, âncoras ou `local-floor` sem que o aparelho tenha concedido.
+
+No código, cada arquivo cuida de um assunto dos slides, e é o `main.ts` que junta tudo: monta a cena, liga o laço, os botões e a sonda.
 
 ## Páginas
 
